@@ -48,7 +48,9 @@ elif [[ "${OS_NAME}" == "windows" ]]; then
   export OPENSSL_LIB_DIR="$( pwd )/openssl/out/${VSCODE_ARCH}-windows-static/lib"
   export OPENSSL_INCLUDE_DIR="$( pwd )/openssl/out/${VSCODE_ARCH}-windows-static/include"
 
-  rustup target add "${VSCODE_CLI_TARGET}"
+  if [[ "${VSCODE_USE_SYSTEM_CARGO}" = "no" ]]; then
+    rustup target add "${VSCODE_CLI_TARGET}"
+  fi
 
   cargo build --release --target "${VSCODE_CLI_TARGET}" --bin=code
 
@@ -84,7 +86,9 @@ else
   fi
 
   if [[ -n "${VSCODE_CLI_TARGET}" ]]; then
-    rustup target add "${VSCODE_CLI_TARGET}"
+    if [[ "${VSCODE_USE_SYSTEM_CARGO}" = "no" ]]; then
+      rustup target add "${VSCODE_CLI_TARGET}"
+    fi
 
     cargo build --release --target "${VSCODE_CLI_TARGET}" --bin=code
 
