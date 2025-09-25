@@ -12,6 +12,15 @@ if [[ "${SHOULD_BUILD}" == "yes" ]]; then
 
   cd vscode || { echo "'vscode' dir not found"; exit 1; }
 
+  if [[ "${SHOULD_REPLACE_TSGO,,}" == "true" ]]; then
+    jq '
+      del(.devDependencies."@typescript/native-preview")
+      | .devDependencies."@loongdotjs/typescript-native-preview" = "7.0.0-dev.20250922.1"
+    ' package.json > package.json.tmp
+    mv package.json.tmp package.json
+    npm i
+  fi
+
   export NODE_OPTIONS="--max-old-space-size=8192"
 
   npm run monaco-compile-check
